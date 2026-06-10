@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HK · AI-prioritering – fælles resultat</title>
+<style>
+@font-face{font-family:"Manrope";font-style:normal;font-weight:300;font-display:swap;src:url(data:font/ttf;base64,AAEAAAAPAIAAAwBwR1BPU6cA/aAAATNYAAA1YkdTVUJb+H0uAAFovAAAD05PUy8ykvh4DAABERAAAABgU1RBVHmRabkAAXgMAAAAKmNtYXDUDepSAAERcAAABuxnYXNwAAAAEAABM1AAAAAIZ2x5Zl0UqQkAAAD8AAD+OmhlYWQgPMRKAAEFJAAAADZoaGVhEKMJUQABEOwAAAAkaG10ePS/KzUAAQVcAAALkGxvY2F9ZD0QAAD/WAAABcptYXhwAvsAvwAA/zgAAAAgbmFtZV+njxIAARhkAAADxHBvc3ROgx8PAAEcKAAAFydwcmVwaAaMhQABGFwAAAAH) format("truetype");}
+@font-face{font-family:"Manrope";font-style:normal;font-weight:400;font-display:swap;src:url(data:font/ttf;base64,AAEAAAAPAIAAAwBwR1BPU6Vf+yUAATO4AAA1YkdTVUJb+H0uAAFpHAAAD05PUy8yk1x4DAABEYQAAABgU1RBVHmSbN0AAXhsAAAALmNtYXDUDepSAAER5AAABuxnYXNwAAAAEAABM7AAAAAIZ2x5ZlIyHD0AAAD8AAD+rmhlYWQgPMRKAAEFmAAAADZoaGVhEKMJUQABEWAAAAAkaG10eC1wKjgAAQXQAAALkGxvY2G7ons5AAD/zAAABcptYXhwAvsAvwAA/6wAAAAgbmFtZVlPhMQAARjYAAADrnBvc3ROgx8PAAEciAAAFydwcmVwaAaMhQABGNAAAAAH) format("truetype");}
+@font-face{font-family:"Manrope";font-style:normal;font-weight:700;font-display:swap;src:url(data:font/ttf;base64,AAEAAAAPAIAAAwBwR1BPU6Ek8+YAATOMAAA1YkdTVUJb+H0uAAFo8AAAD05PUy8ylIh37AABEXAAAABgU1RBVHmVa0kAAXhAAAAAKmNtYXDUDepSAAER0AAABuxnYXNwAAAAEAABM4QAAAAIZ2x5Zqzfbq8AAAD8AAD+mmhlYWQgPcRKAAEFhAAAADZoaGVhEKMJUQABEUwAAAAkaG10eNelJ1MAAQW8AAALkGxvY2G/on8/AAD/uAAABcptYXhwAvsAvwAA/5gAAAAgbmFtZVWpgi0AARjEAAADlnBvc3ROgx8PAAEcXAAAFydwcmVwaAaMhQABGLwAAAAH) format("truetype");}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;background:#e8e8e3;font-family:"Manrope","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;}
+
+/* ── ENTRY SCREEN ── */
+.entry-wrap{max-width:680px;margin:0 auto;padding:48px 24px 80px;}
+.entry-head{display:flex;align-items:flex-start;gap:16px;margin-bottom:28px;}
+.entry-bar{width:7px;align-self:stretch;min-height:56px;background:#009FE3;flex-shrink:0;}
+.logo{height:30px;width:auto;}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#009FE3;margin-top:8px;}
+h1{font-weight:300;font-size:36px;line-height:1.05;letter-spacing:-.02em;color:#141E2D;margin:4px 0 0;}
+.entry-sub{font-size:16px;color:#6b7280;margin-top:6px;line-height:1.45;}
+.panel{background:#fff;border:1px solid rgba(20,30,45,.12);padding:22px;margin-bottom:16px;}
+.panel-title{font-weight:700;font-size:18px;color:#141E2D;margin-bottom:8px;}
+.panel-body{font-size:15px;line-height:1.5;color:#6b7280;}
+textarea{width:100%;height:140px;font-family:"SFMono-Regular",Consolas,monospace;font-size:13px;padding:10px;border:1px solid rgba(20,30,45,.15);resize:vertical;line-height:1.5;color:#141E2D;background:#fafafa;}
+textarea:focus{outline:2px solid #009FE3;outline-offset:1px;}
+.order-note{font-size:12px;color:#9ca3af;font-style:italic;margin:8px 0;line-height:1.6;}
+.err{color:#8C2D37;font-size:13px;font-weight:700;margin-top:8px;}
+.btn{background:#009FE3;color:#fff;border:none;padding:13px 24px;font-family:"Manrope",sans-serif;font-size:16px;font-weight:700;cursor:pointer;letter-spacing:.01em;}
+.btn:hover{background:#0089c4;}
+.btn-ghost{background:none;border:1.5px solid #141E2D;color:#141E2D;padding:9px 18px;font-family:"Manrope",sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
+.btn-ghost:hover{background:#141E2D;color:#fff;}
+.hidden{display:none;}
+
+/* ── 16:9 RESULT SCREEN ── */
+.screen{
+  position:fixed;
+  top:0;left:0;
+  width:100vw;height:100vh;
+  display:flex;flex-direction:column;
+  background:#e8e8e3;
+  overflow:hidden;
+  z-index:100;
+}
+
+/* header bar */
+.hdr{
+  display:flex;align-items:center;gap:1.2vw;
+  padding:.8vh 2vw .6vh;
+  background:#fff;
+  border-bottom:3px solid #009FE3;
+  flex-shrink:0;
+}
+.hdr-bar{width:.5vw;align-self:stretch;min-height:3vh;background:#009FE3;flex-shrink:0;}
+.hdr-logo{height:2.6vh;width:auto;}
+.hdr-divider{width:1px;height:3vh;background:rgba(20,30,45,.15);margin:0 .4vw;}
+.hdr-eyebrow{font-size:.85vw;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#009FE3;}
+.hdr-title{font-size:1.55vw;font-weight:300;letter-spacing:-.02em;color:#141E2D;line-height:1.1;}
+.hdr-spacer{flex:1;}
+.splash{
+  width:5.5vw;aspect-ratio:1/1;
+  background:#009FE3;color:#fff;
+  clip-path:polygon(50% 0%,75% 6.7%,93.3% 25%,100% 50%,93.3% 75%,75% 93.3%,50% 100%,25% 93.3%,6.7% 75%,0% 50%,6.7% 25%,25% 6.7%);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.splash>div{text-align:center;line-height:1;}
+.splash .n{font-size:1.6vw;font-weight:300;}
+.splash .lbl{font-size:.6vw;font-weight:700;letter-spacing:.05em;margin-top:.15vh;}
+
+/* two-column grid */
+.grid{
+  flex:1;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:.8vw;
+  padding:.8vw 1.5vw;
+  overflow:hidden;
+}
+.col{display:flex;flex-direction:column;gap:.4vh;}
+
+/* priority row */
+.prow{
+  display:flex;align-items:center;gap:.7vw;
+  padding:.65vh .8vw;
+  background:#fff;
+  border:1px solid rgba(20,30,45,.13);
+  border-left:4px solid #009FE3;
+  cursor:grab;
+  user-select:none;
+  transition:transform .15s ease, opacity .15s ease, box-shadow .1s ease, background .1s;
+  flex:1;
+  position:relative;
+}
+.prow.is-dragging{opacity:.22;background:#d6eaf5;cursor:grabbing;}
+.prow.drag-over{box-shadow:0 0 0 2px #009FE3;}
+
+.rank-badge{
+  width:2.8vw;height:2.8vw;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5vw;font-weight:700;color:#fff;
+}
+.rank-badge.top{background:#009FE3;}
+.rank-badge.mid{background:#649DB8;}
+.rank-badge.low{background:#004052;}
+
+.prow-meta{flex:1;min-width:0;}
+.prow-title{font-size:1.1vw;font-weight:700;color:#141E2D;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.prow-desc{font-size:.78vw;color:#6b7280;margin-top:.15vh;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.prow-score{display:flex;align-items:baseline;gap:.3vw;flex-shrink:0;}
+.score-num{font-size:1.6vw;font-weight:300;color:#141E2D;line-height:1;}
+.score-unit{font-size:.65vw;color:#9ca3af;font-weight:700;}
+
+.prow-grip{color:#9ca3af;font-size:.9vw;flex-shrink:0;letter-spacing:-2px;}
+
+/* footer actions */
+.footer{
+  display:flex;align-items:center;gap:.8vw;
+  padding:.5vh 1.5vw .7vh;
+  flex-shrink:0;
+}
+.footer-btn{font-family:"Manrope",sans-serif;cursor:pointer;font-size:.7vw;font-weight:700;padding:.4vh .8vw;border:1.5px solid rgba(20,30,45,.25);background:none;color:#6b7280;}
+.footer-btn:hover{border-color:#009FE3;color:#009FE3;}
+.footer-btn.primary{background:#009FE3;color:#fff;border-color:#009FE3;}
+.footer-btn.primary:hover{background:#0089c4;}
+
+/* ── PRINT ── */
+@media print{
+  .footer{display:none!important;}
+  .screen{height:auto;}
+  .grid{height:auto;}
+  .prow{break-inside:avoid;}
+  body{background:#fff;}
+}
+</style>
+</head>
+<body>
+
+<!-- ENTRY -->
+<div id="entry">
+<div class="entry-wrap">
+  <div class="entry-head">
+    <div class="entry-bar"></div>
+    <div>
+      <img class="logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABuwAAAPsCAYAAACujprKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+1pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ1dWlkOjVEMjA4OTI0OTNCRkRCMTE5MTRCODU5MEQzMTUwOEM4IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkMwMUY1RjJFRjQ4NjExRThBMEE2RTNDNDA4QzFGNkZCIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjAxNTRGOUI0RjQ4NjExRThBMEE2RTNDNDA4QzFGNkZCIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIElsbHVzdHJhdG9yIENTNiAoTWFjaW50b3NoKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjA0ODAxMTc0MDcyMDY4MTE4MjJBQTlGMjY3MjMxNTVEIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjA0ODAxMTc0MDcyMDY4MTE4MjJBQTlGMjY3MjMxNTVEIi8+IDxkYzp0aXRsZT4gPHJkZjpBbHQ+IDxyZGY6bGkgeG1sOmxhbmc9IngtZGVmYXVsdCI+SEtfQ01ZSzwvcmRmOmxpPiA8L3JkZjpBbHQ+IDwvZGM6dGl0bGU+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+0Z8uQgAAUpZJREFUeNrs3UtuK1uanuF/GYbbBNw2zCHsIXAIGoLUclOMEUgcAbn7BsQhaAicgFGcgQkUYMM9zWB5RaSP85yT+6ILL39EPA8QC+Wsk3tLbwEFVH6OWCVe/r0GQD6bePgvzzIAqbz8e/+/l56EADL5T//zf8R//u//TQgg5f9d97//1//xf9cBuZT4t3Z+EwJI5vQfNAAAAAAAYPJKrMNYB+TUGewAAAAAAJi2EovwxRQgp0PUeDXYAQAAAAAwdf1Yt5ABSOihPwx2AAAAAABMVxk+g7kWAkhoEzVO/X9hsAMAAAAAYMq2EgAJvbVn98f/w2AHAAAAAMA0lbhv50oIIKEu6jDaDQx2AAAAAABMTxnurHsSAkjoEDX2f/4XDHYAAAAAAExRf2/dUgYgoe7v/4LBDgAAAAAAAA" alt="HK" style="height:30px">
+      <div class="eyebrow">AI-strategi</div>
+      <h1>AI-prioritering – fælles resultat</h1>
+      <div class="entry-sub">Indlæs jeres surveydata og præsentér den fælles prioritering for gruppen.</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Indsæt surveydata</div>
+    <div class="panel-body">Én linje per deltager. Hvert tal er deltagerens rangplacering (1 = højest prioriteret). Adskil med komma, semikolon eller tab.</div>
+    <div class="order-note" id="orderNote"></div>
+    <textarea id="raw" placeholder="Eksempel (3 deltagere):&#10;3,1,2,5,4,6,7,8,9,10,11,12&#10;1,2,3,4,5,6,7,8,9,10,11,12&#10;2,3,1,6,5,4,8,7,9,11,10,12"></textarea>
+    <div class="err hidden" id="err"></div>
+    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn" id="loadBtn">Indlæs og vis prioritering →</button>
+      <button class="btn-ghost" id="randomBtn">Generér 12 tilfældige deltagere</button>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- RESULT (16:9) -->
+<div id="result" class="screen hidden" style="display:none">
+  <div class="hdr">
+    <div class="hdr-bar"></div>
+    <img class="hdr-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABuwAAAPsCAYAAACujprKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA+1pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ1IDc5LjE2MzQ5OSwgMjAxOC8wOC8xMy0xNjo0MDoyMiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ1dWlkOjVEMjA4OTI0OTNCRkRCMTE5MTRCODU5MEQzMTUwOEM4IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkMwMUY1RjJFRjQ4NjExRThBMEE2RTNDNDA4QzFGNkZCIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjAxNTRGOUI0RjQ4NjExRThBMEE2RTNDNDA4QzFGNkZCIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIElsbHVzdHJhdG9yIENTNiAoTWFjaW50b3NoKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjA0ODAxMTc0MDcyMDY4MTE4MjJBQTlGMjY3MjMxNTVEIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjA0ODAxMTc0MDcyMDY4MTE4MjJBQTlGMjY3MjMxNTVEIi8+IDxkYzp0aXRsZT4gPHJkZjpBbHQ+IDxyZGY6bGkgeG1sOmxhbmc9IngtZGVmYXVsdCI+SEtfQ01ZSzwvcmRmOmxpPiA8L3JkZjpBbHQ+IDwvZGM6dGl0bGU+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+0Z8uQgAAUpZJREFUeNrs3UtuK1uanuF/GYbbBNw2zCHsIXAIGoLUclOMEUgcAbn7BsQhaAicgFGcgQkUYMM9zWB5RaSP85yT+6ILL39EPA8QC+Wsk3tLbwEFVH6OWCVe/r0GQD6bePgvzzIAqbz8e/+/l56EADL5T//zf8R//u//TQgg5f9d97//1//xf9cBuZT4t3Z+EwJI5vQfNAAAAAAAYPJKrMNYB+TUGewAAAAAAJi2EovwxRQgp0PUeDXYAQAAAAAwdf1Yt5ABSOihPwx2AAAAAABMVxk+g7kWAkhoEzVO/X9hsAMAAAAAYMq2EgAJvbVn98f/w2AHAAAAAMA0lbhv50oIIKEu6jDaDQx2AAAAAABMTxnurHsSAkjoEDX2f/4XDHYAAAAAAExRf2/dUgYgoe7v/4LBDgAAAAAAAA" alt="HK" style="height:2.4vh">
+    <div class="hdr-divider"></div>
+    <div>
+      <div class="hdr-eyebrow">AI-strategi</div>
+      <div class="hdr-title">AI-prioritering – fælles resultat</div>
+    </div>
+    <div class="hdr-spacer"></div>
+    <div class="splash"><div><div class="n" id="numP">0</div><div class="lbl">deltagere</div></div></div>
+  </div>
+
+  <div class="grid" id="grid">
+    <div class="col" id="col0"></div>
+    <div class="col" id="col1"></div>
+  </div>
+
+  <div class="footer">
+    <button class="footer-btn" id="resortBtn" data-state="manual">Nulstil til beregnet rækkefølge</button>
+    <button class="footer-btn" id="newBtn">← Ny data</button>
+  </div>
+</div>
+
+<script>
+const N = 12;
+const ITEMS = [
+  { id:1,  title:"Hurtigere opgaveløsning",                     desc:"Reduktion af tid brugt på rutineopgaver og gentagne administrative arbejdsgange." },
+  { id:2,  title:"Frigørelse af tid til kerneopgaven",          desc:"Mindre skærmtid på drift, mere tid til rådgivning og medlemmer." },
+  { id:3,  title:"Bedre ressourceudnyttelse",                   desc:"Evnen til at håndtere flere opgaver eller spidsbelastninger uden ekstra bemanding." },
+  { id:4,  title:"Stærkere analyse & data",                     desc:"Hurtigere opsamling af tendenser fra store mængder tekst eller data." },
+  { id:5,  title:"Højere faglig kvalitet",                      desc:"AI som sparringspartner der fanger fejl eller foreslår forbedringer i komplekse sager." },
+  { id:6,  title:"Bedre medlemsservice",                        desc:"Hurtigere og mere præcise svar på henvendelser via intelligente vidensdatabaser." },
+  { id:7,  title:"Skarp og målrettet kommunikation",            desc:"Evnen til hurtigt at formulere og tilpasse budskaber til forskellige målgrupper." },
+  { id:8,  title:"Øget videndeling",                            desc:"At gøre tavs viden tilgængelig på tværs af de 200 ansatte via interne AI-værktøjer." },
+  { id:9,  title:"Mere arbejdsglæde",                           desc:"Fjernelse af de kedelige gentagelser, så arbejdet føles mere meningsfuldt." },
+  { id:10, title:"Øget kreativitet & innovation",               desc:"AI som katalysator for nye ideer og måder at løse gamle problemer på." },
+  { id:11, title:"Større tryghed i teknologien (AI Literacy)",  desc:"At alle føler sig kompetente og herre over egne værktøjer." },
+  { id:12, title:"Fremtidssikring af opgaver",                  desc:"At vi som organisation er på forkant med de krav, der stilles." },
+];
+
+const dk = n => n.toFixed(1).replace(".", ",");
+const avgRank = r => r.length ? r.reduce((a,b)=>a+b,0)/r.length : 0;
+
+function parseInput(raw){
+  const lines = raw.trim().split(/\r?\n/).filter(l=>l.trim());
+  const rows = lines.map(l=>l.split(/[,;\t]+/).map(v=>parseInt(v.trim(),10)).filter(v=>!isNaN(v)));
+  if (rows.length===12 && rows.every(r=>r.length>1)) return rows;
+  if (rows.length && rows.every(r=>r.length===12)) return Array.from({length:12},(_,i)=>rows.map(r=>r[i]));
+  return null;
+}
+
+let itemRanks = null;
+let order = [];
+let savedOrder = null;
+let dragId = null;
+let dragOver = null;
+
+const $ = id => document.getElementById(id);
+
+$("orderNote").textContent = "Rækkefølge i CSV: " + ITEMS.map(i=>i.title).join(" · ");
+
+function computedOrder(){
+  return [...ITEMS].sort((a,b)=>avgRank(itemRanks[a.id])-avgRank(itemRanks[b.id])).map(i=>i.id);
+}
+
+function rankClass(rank){
+  if (rank<=3)  return "top";
+  if (rank<=9)  return "mid";
+  return "low";
+}
+
+function render(){
+  $("numP").textContent = (itemRanks[1]||[]).length;
+  const cols = [$("col0"), $("col1")];
+  cols.forEach(c=>c.innerHTML="");
+
+  order.forEach((id, idx) => {
+    const rank = idx+1;
+    const item = ITEMS.find(i=>i.id===id);
+    const ranks = itemRanks[id]||[];
+    const avg = avgRank(ranks);
+    const col = idx < 6 ? cols[0] : cols[1];
+
+    const row = document.createElement("div");
+    row.className = "prow" + (dragId===id?" is-dragging":"") + (dragOver===id&&dragId!==id?" drag-over":"");
+    row.dataset.id = id;
+    row.draggable = true;
+    row.innerHTML = `
+      <div class="rank-badge ${rankClass(rank)}">${rank}</div>
+      <div class="prow-meta">
+        <div class="prow-title">${item.title}</div>
+        <div class="prow-desc">${item.desc}</div>
+      </div>
+      ${ranks.length ? `<div class="prow-score"><span class="score-num">${dk(avg)}</span><span class="score-unit">i gennemsnit</span></div>` : ""}
+      <div class="prow-grip">⋮⋮</div>`;
+    col.appendChild(row);
+  });
+
+  bindDrag();
+}
+
+function bindDrag(){
+  [...document.querySelectorAll(".prow")].forEach(row => {
+    const id = +row.dataset.id;
+
+    row.addEventListener("dragstart", e => {
+      dragId = id;
+      e.dataTransfer.effectAllowed = "move";
+      requestAnimationFrame(()=>row.classList.add("is-dragging"));
+    });
+
+    row.addEventListener("dragover", e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      if (dragOver === id) return;
+      dragOver = id;
+
+      if (dragId !== null && dragId !== id) {
+        const a = [...order];
+        const fromIdx = a.indexOf(dragId);
+        const toIdx = a.indexOf(id);
+        a.splice(fromIdx, 1);
+        a.splice(toIdx, 0, dragId);
+        order = a;
+        render();
+      }
+    });
+
+    row.addEventListener("drop", e => {
+      e.preventDefault();
+      onManualDrag();
+      dragId = null; dragOver = null;
+      render();
+    });
+
+    row.addEventListener("dragend", () => {
+      dragId = null; dragOver = null;
+      render();
+    });
+  });
+}
+
+function onManualDrag(){
+  const btn = $("resortBtn");
+  btn.textContent = "Nulstil til beregnet rækkefølge";
+  btn.dataset.state = "manual";
+  savedOrder = null;
+}
+
+function load(parsed){
+  itemRanks = {};
+  ITEMS.forEach((it,i)=>{ itemRanks[it.id] = parsed[i]||[]; });
+  order = computedOrder();
+  savedOrder = null;
+  $("entry").style.display = "none";
+  $("result").style.display = "flex";
+  render();
+}
+
+$("loadBtn").addEventListener("click",()=>{
+  const parsed = parseInput($("raw").value);
+  const err = $("err");
+  if(!parsed){
+    err.textContent="Kunne ikke læse data. Tjek at hvert svar er 12 tal adskilt af komma, semikolon eller tab — ét svar per linje.";
+    err.classList.remove("hidden"); return;
+  }
+  err.classList.add("hidden");
+  load(parsed);
+});
+
+$("randomBtn").addEventListener("click",()=>{
+  const fake = Array.from({length:12},()=>Array.from({length:12},()=>Math.ceil(Math.random()*12)));
+  load(fake);
+});
+
+$("resortBtn").addEventListener("click",()=>{
+  const btn = $("resortBtn");
+  if(btn.dataset.state==="reset"){
+    order = [...savedOrder];
+    savedOrder = null;
+    btn.textContent="Nulstil til beregnet rækkefølge";
+    btn.dataset.state="manual";
+  } else {
+    savedOrder = [...order];
+    order = computedOrder();
+    btn.textContent="Tilbage til ændret rækkefølge";
+    btn.dataset.state="reset";
+  }
+  render();
+});
+
+$("newBtn").addEventListener("click",()=>{
+  $("result").style.display = "none";
+  $("entry").style.display = "block";
+});
+
+
+</script>
+</body>
+</html>
